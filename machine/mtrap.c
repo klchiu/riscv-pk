@@ -9,6 +9,7 @@
 #include "uart.h"
 #include "uart16550.h"
 #include "uart_litex.h"
+#include "apbuart.h"
 #include "finisher.h"
 #include "fdt.h"
 #include "unprivileged_memory.h"
@@ -30,6 +31,8 @@ static uintptr_t mcall_console_putchar(uint8_t ch)
     uart16550_putchar(ch);
   } else if (uart_litex) {
     uart_litex_putchar(ch);
+  } else if (apbuart) {
+    apbuart_putchar(ch);
   } else if (htif) {
     htif_console_putchar(ch);
   }
@@ -74,6 +77,8 @@ static uintptr_t mcall_console_getchar()
     return uart16550_getchar();
   } else if (uart_litex) {
     return uart_litex_getchar();
+  } else if (apbuart) {
+    return apbuart_getchar();
   } else if (htif) {
     return htif_console_getchar();
   } else {
